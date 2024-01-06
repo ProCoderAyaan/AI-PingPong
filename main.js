@@ -20,12 +20,29 @@ var ball = {
     dx:3,
     dy:3
 }
+rightWristY = 0;
+rightWristX = 0;
+scoreRightWrist = 0;
 
-function setup(){
-  var canvas =  createCanvas(700,600);
+game_status = "";
+
+ function preload() {
+  ball_touch_paddel = loadSound("ball_touch_paddel.wav");
+  missed = loadSound("missed.wav");
 }
 
-
+function setup(){
+var canvas =  createCanvas(700,600);
+canvas.parent('canvas');
+video = createCapture(VIDEO);
+video.size(700, 600);
+video.hide();
+poseNet = ml5.poseNet(video, modelLoaded);
+poseNet.on('pose', gotPoses);
+}
+function modelLoaded() {
+  console.log('PoseNet Is Initialized');
+}
 function draw(){
 
  background(0); 
@@ -37,6 +54,7 @@ function draw(){
  fill("black");
  stroke("black");
  rect(0,0,20,700);
+}
  
    //funtion paddleInCanvas call 
    paddleInCanvas();
@@ -65,7 +83,7 @@ function draw(){
    
    //function move call which in very important
     move();
-}
+
 
 
 
